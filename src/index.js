@@ -2,6 +2,7 @@
 import dns from 'node:dns';
 import dotenv from 'dotenv';
 import connectDB from './db/index.js'
+import { app } from './app.js';
 
 
 dotenv.config({
@@ -10,7 +11,15 @@ dotenv.config({
 
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 
-connectDB();
+connectDB()
+.then(()=>{
+  app.listen(process.env.PORT||4000,()=>{
+    console.log(`Server is running at port ${process.env.PORT||4000}`);
+  });
+})
+.catch((error)=>{
+  console.log("MongoDB connection Failed !!", error);
+});
 
 
 
